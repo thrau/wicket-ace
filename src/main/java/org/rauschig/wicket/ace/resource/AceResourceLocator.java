@@ -15,25 +15,69 @@
  */
 package org.rauschig.wicket.ace.resource;
 
+import org.apache.wicket.request.resource.JavaScriptPackageResource;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
- * AceResourceLocator
+ * Default AceResourceLocator.
  */
-public class AceResourceLocator {
+public class AceResourceLocator implements IAceResourceLocator {
+
+    private static final long serialVersionUID = 1L;
 
     protected static final String ROOT_PATH = "js";
 
+    private Class<?> scope;
+
+    public AceResourceLocator() {
+        this(AceResourceLocator.class);
+    }
+
+    public AceResourceLocator(Class<?> scope) {
+        this.scope = scope;
+    }
+
+    @Override
+    public JavaScriptResourceReference getAce() {
+        return AceJsResourceReference.get();
+    }
+
+    @Override
     public JavaScriptResourceReference getMode(String mode) {
-        return new JavaScriptResourceReference(AceResourceLocator.class, getModePath(mode));
+        return new JavaScriptResourceReference(getScope(), getModePath(mode));
     }
 
+    @Override
     public JavaScriptResourceReference getTheme(String theme) {
-        return new JavaScriptResourceReference(AceResourceLocator.class, getThemePath(theme));
+        return new JavaScriptResourceReference(getScope(), getThemePath(theme));
     }
 
+    @Override
     public JavaScriptResourceReference getWorker(String worker) {
-        return new JavaScriptResourceReference(AceResourceLocator.class, getWorkerPath(worker));
+        return new JavaScriptResourceReference(getScope(), getWorkerPath(worker));
+    }
+
+    @Override
+    public boolean modeExists(String mode) {
+        return exists(getModePath(mode));
+    }
+
+    @Override
+    public boolean themeExists(String theme) {
+        return exists(getThemePath(theme));
+    }
+
+    @Override
+    public boolean workerExists(String mode) {
+        return exists(getWorkerPath(mode));
+    }
+
+    public Class<?> getScope() {
+        return scope;
+    }
+
+    protected boolean exists(String path) {
+        return JavaScriptPackageResource.exists(getScope(), path, null, null, null);
     }
 
     protected String getModePath(String mode) {

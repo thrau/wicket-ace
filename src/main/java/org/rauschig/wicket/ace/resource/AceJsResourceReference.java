@@ -23,7 +23,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 
 /**
- * AceJsResourceReference.
+ * Singleton ResourceReference that references the main ace dependency.
  */
 public class AceJsResourceReference extends JavaScriptResourceReference {
 
