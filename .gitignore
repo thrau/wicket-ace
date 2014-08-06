@@ -1,0 +1,21 @@
+# Maven files
+target/
+bin/
+
+# Eclipse project files
+.project
+.classpath
+.settings
+.metadata
+
+# IntelliJ IDEA files
+*.iml
+*.ipr
+*.iws
+.idea
+
+# Mac OS
+.DS_Store
+
+# backup-files
+*~
