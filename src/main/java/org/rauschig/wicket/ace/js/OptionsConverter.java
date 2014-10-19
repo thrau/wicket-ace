@@ -15,16 +15,15 @@
  */
 package org.rauschig.wicket.ace.js;
 
-import java.util.Map;
-
 import org.apache.wicket.util.io.IClusterable;
+import org.apache.wicket.util.value.IValueMap;
 import org.rauschig.wicket.ace.AceConfig;
 import org.rauschig.wicketjs.JsLiteral;
 import org.rauschig.wicketjs.JsLiteral.JsObject;
 
 /**
- * Used to convert an AceConfig instance into an actual ace-understandable config. Holds all the peculiarities of
- * the java bean/js object binding.
+ * Used to convert an AceConfig instance into an actual ace-understandable config. Holds all the peculiarities of the
+ * java bean/js object binding.
  */
 public class OptionsConverter implements IClusterable {
 
@@ -37,7 +36,7 @@ public class OptionsConverter implements IClusterable {
      * @return a JsObject literal
      */
     public JsObject makeOptions(AceConfig config) {
-        Map<String, Object> map = config.getMap();
+        IValueMap map = config.getMap();
 
         if (config.getTheme() != null) {
             map.put("theme", "ace/theme/" + config.getTheme());

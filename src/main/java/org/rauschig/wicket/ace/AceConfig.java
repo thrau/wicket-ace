@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.wicket.util.io.IClusterable;
+import org.apache.wicket.util.value.IValueMap;
+import org.apache.wicket.util.value.ValueMap;
 
 /**
  * Such parameters. Many config. Wow.
@@ -30,7 +32,7 @@ public class AceConfig implements IClusterable {
 
     private static final long serialVersionUID = 1L;
 
-    private Map<String, Object> map;
+    private IValueMap map;
 
     public AceConfig() {
         this(new HashMap<String, Object>());
@@ -43,6 +45,10 @@ public class AceConfig implements IClusterable {
     }
 
     protected AceConfig(Map<String, Object> map) {
+        this(new ValueMap(map));
+    }
+
+    protected AceConfig(IValueMap map) {
         this.map = map;
     }
 
@@ -683,8 +689,8 @@ public class AceConfig implements IClusterable {
         return get("useElasticTabstops");
     }
 
-    public Map<String, Object> getMap() {
-        return new HashMap<>(map);
+    public IValueMap getMap() {
+        return map;
     }
 
     @SuppressWarnings("unchecked")
