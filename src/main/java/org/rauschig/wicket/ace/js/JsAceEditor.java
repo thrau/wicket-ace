@@ -19,9 +19,12 @@ import org.apache.wicket.Component;
 import org.rauschig.wicket.ace.AceConfig;
 import org.rauschig.wicketjs.IJavaScript;
 import org.rauschig.wicketjs.IJsExpression;
+import org.rauschig.wicketjs.IJsStatement;
+import org.rauschig.wicketjs.JsCall;
 import org.rauschig.wicketjs.JsCallChain;
 import org.rauschig.wicketjs.JsIdentifier;
 import org.rauschig.wicketjs.JsLiteral;
+import org.rauschig.wicketjs.JsVariableDefinition;
 import org.rauschig.wicketjs.util.options.IOptions;
 
 /**
@@ -84,6 +87,14 @@ public class JsAceEditor extends JsIdentifier {
 
     public JsCallChain call(CharSequence function, Object... args) {
         return new JsCallChain(this).call(function, args);
+    }
+
+    /**
+     * Returns a JsVariableDefinition that creates a new variable named as this identifier and binds the result of
+     * <code>ace.edit('...')</code> to it.
+     */
+    public IJsStatement register() {
+        return new JsVariableDefinition(this, new JsCall("ace.edit", getIdentifier()));
     }
 
 }
