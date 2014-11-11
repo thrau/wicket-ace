@@ -15,10 +15,9 @@
  */
 package org.rauschig.wicket.ace;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.rauschig.wicket.ace.js.JsAceEditor;
@@ -27,22 +26,26 @@ import org.rauschig.wicket.ace.resource.IAceResourceLocator;
 import org.rauschig.wicketjs.IJavaScript;
 import org.rauschig.wicketjs.JsCall;
 import org.rauschig.wicketjs.JsCallChain;
+import org.rauschig.wicketjs.JsFunction;
 import org.rauschig.wicketjs.JsIdentifier;
 import org.rauschig.wicketjs.JsStatements;
 import org.rauschig.wicketjs.JsVariableDefinition;
 import org.rauschig.wicketjs.behavior.JsBehavior;
+import org.rauschig.wicketjs.util.options.Options;
+
+import static org.rauschig.wicketjs.jquery.JQuery.$;
 
 /**
- * AceEditor.
+ * AceEditorField
  */
-public class AceEditor extends WebMarkupContainer {
+public class AceEditorField<T> extends TextArea<T> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * JS interface
      */
-    protected JsAceEditor editor = new JsAceEditor(this);
+    protected JsAceEditor editor;
 
     /**
      * Options
@@ -54,31 +57,31 @@ public class AceEditor extends WebMarkupContainer {
      */
     private IAceResourceLocator aceResourceLocator;
 
-    public AceEditor(String id) {
+    public AceEditorField(String id) {
         this(id, new AceConfig());
     }
 
-    public AceEditor(String id, String mode, String theme) {
+    public AceEditorField(String id, String mode, String theme) {
         this(id, new AceConfig(mode, theme));
     }
 
-    public AceEditor(String id, AceConfig options) {
+    public AceEditorField(String id, AceConfig options) {
         this(id, null, options);
     }
 
-    public AceEditor(String id, IModel<?> model) {
+    public AceEditorField(String id, IModel<T> model) {
         this(id, model, new AceResourceLocator());
     }
 
-    public AceEditor(String id, IModel<?> model, IAceResourceLocator aceResourceLocator) {
+    public AceEditorField(String id, IModel<T> model, IAceResourceLocator aceResourceLocator) {
         this(id, model, new AceConfig(), aceResourceLocator);
     }
 
-    public AceEditor(String id, IModel<?> model, AceConfig options) {
+    public AceEditorField(String id, IModel<T> model, AceConfig options) {
         this(id, model, options, new AceResourceLocator());
     }
 
-    public AceEditor(String id, IModel<?> model, AceConfig options, IAceResourceLocator aceResourceLocator) {
+    public AceEditorField(String id, IModel<T> model, AceConfig options, IAceResourceLocator aceResourceLocator) {
         super(id, model);
         this.options = options;
         this.aceResourceLocator = aceResourceLocator;
@@ -89,6 +92,34 @@ public class AceEditor extends WebMarkupContainer {
         super.onInitialize();
         setOutputMarkupId(true);
 
+        editor = new JsAceEditor(getMarkupId() + "_editor");
+
+        add(new JsBehavior() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected IJavaScript domReadyJs() {
+                String editDiv = "div_" + editor.getIdentifier();
+                JsIdentifier textarea = new JsIdentifier("textarea_" + editor.getIdentifier());
+
+                return new JsStatements(
+                    new JsVariableDefinition(textarea, $(this)),
+                    $(textarea).hide(),
+                    new JsVariableDefinition(editDiv, new JsCall("$", "<div>", new Options()
+                            .set("id", editor.getIdentifier())
+                            .set("width", new JsCallChain(textarea).call("width"))
+                            .set("height", new JsCallChain(textarea).call("height"))
+                            .set("class", new JsCallChain(textarea).call("attr", "class"))
+                            .asObject()
+                    )),
+                    new JsCallChain(editDiv).call("insertBefore", textarea),
+                    new JsCallChain(textarea).call("closest", "form").call("submit", new JsFunction(
+                            $(textarea).val(editor.getSession().getValue())
+                    ))
+                );
+            }
+        });
+
         if (useWorker()) {
             add(new WorkerConfigurationBehavior());
         }
@@ -96,7 +127,24 @@ public class AceEditor extends WebMarkupContainer {
         add(new AceEditorBehavior());
     }
 
-    public AceEditor setOption(String option, Object value) {
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(JavaScriptHeaderItem.forReference(getAceReference()));
+
+        if (getAceResourceLocator().modeExists(options.getMode())) {
+            response.render(JavaScriptHeaderItem.forReference(getModeReference()));
+        }
+
+        if (getAceResourceLocator().themeExists(options.getTheme())) {
+            response.render(JavaScriptHeaderItem.forReference(getThemeReference()));
+        }
+
+        if (useWorker()) {
+            response.render(JavaScriptHeaderItem.forReference(getWorkerReference()));
+        }
+    }
+
+    public AceEditorField setOption(String option, Object value) {
         getOptions().set(option, value);
         return this;
     }
@@ -104,7 +152,7 @@ public class AceEditor extends WebMarkupContainer {
     /**
      * Returns the JsAceEditor instance that uses this components id as identifier. This can be used to define frontend
      * js behavior.
-     * 
+     *
      * @return the JsAceEditor instance
      */
     public JsAceEditor getFrontend() {
@@ -125,7 +173,7 @@ public class AceEditor extends WebMarkupContainer {
 
     /**
      * Determines whether or not this editor should use a worker (ace's basic syntax checking).
-     * 
+     *
      * @return true if a worker is used and available
      */
     protected boolean useWorker() {
@@ -169,26 +217,11 @@ public class AceEditor extends WebMarkupContainer {
         @Override
         protected IJavaScript domReadyJs() {
             return new JsStatements(
-                editor.register(),
-                editor.setOptions(options)
+                    editor.register(),
+                    editor.setOptions(options),
+                    editor.setValue($(this).val())
             );
         }
 
-        @Override
-        protected void onRenderHead(IHeaderResponse response) {
-            response.render(JavaScriptHeaderItem.forReference(getAceReference()));
-
-            if (getAceResourceLocator().modeExists(options.getMode())) {
-                response.render(JavaScriptHeaderItem.forReference(getModeReference()));
-            }
-
-            if (getAceResourceLocator().themeExists(options.getTheme())) {
-                response.render(JavaScriptHeaderItem.forReference(getThemeReference()));
-            }
-
-            if (useWorker()) {
-                response.render(JavaScriptHeaderItem.forReference(getWorkerReference()));
-            }
-        }
     }
 }
