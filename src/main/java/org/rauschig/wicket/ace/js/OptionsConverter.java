@@ -17,6 +17,7 @@ package org.rauschig.wicket.ace.js;
 
 import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.value.IValueMap;
+import org.apache.wicket.util.value.ValueMap;
 import org.rauschig.wicket.ace.AceConfig;
 import org.rauschig.wicketjs.JsLiteral;
 import org.rauschig.wicketjs.JsLiteral.JsObject;
@@ -36,7 +37,7 @@ public class OptionsConverter implements IClusterable {
      * @return a JsObject literal
      */
     public JsObject makeOptions(AceConfig config) {
-        IValueMap map = config.getMap();
+        IValueMap map = new ValueMap(config.getMap());
 
         if (config.getTheme() != null) {
             map.put("theme", "ace/theme/" + config.getTheme());

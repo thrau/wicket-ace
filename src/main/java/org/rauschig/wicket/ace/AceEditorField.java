@@ -15,6 +15,8 @@
  */
 package org.rauschig.wicket.ace;
 
+import static org.rauschig.wicketjs.jquery.JQuery.$;
+
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -32,8 +34,6 @@ import org.rauschig.wicketjs.JsStatements;
 import org.rauschig.wicketjs.JsVariableDefinition;
 import org.rauschig.wicketjs.behavior.JsBehavior;
 import org.rauschig.wicketjs.util.options.Options;
-
-import static org.rauschig.wicketjs.jquery.JQuery.$;
 
 /**
  * AceEditorField
