@@ -11,7 +11,7 @@
 
   <groupId>org.rauschig</groupId>
   <artifactId>wicket-ace</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0</version>
 
   <packaging>bundle</packaging>
 
@@ -29,6 +29,7 @@
     <url>https://github.com/thrau/wicket-ace</url>
     <connection>scm:git:git://git@github.com:thrau/wicket-ace.git</connection>
     <developerConnection>scm:git:git@github.com:thrau/wicket-ace.git</developerConnection>
+    <tag>v0.1.0</tag>
   </scm>
 
   <developers>
