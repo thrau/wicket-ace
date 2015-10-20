@@ -17,12 +17,39 @@
 
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<head>
+  <wicket:head>
+    <style type="text/css">
+      .panel-body > .ace_editor {
+        width: 100% !important;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </wicket:head>
+</head>
 <body>
 <wicket:extend>
-  <p>
-    This application contains examples for the <a href="https://ace.c9.io">ace</a> integration for
-    <a href="http://wicket.apache.org">Wicket</a>.
-  </p>
+
+  <form wicket:id="form">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Form integration
+      </div>
+
+      <div class="panel-body">
+        <p>
+          This editor field works like a <code>textarea</code>. Check your application log after submitting.
+        </p>
+
+        <textarea wicket:id="code" rows="20" title="code"></textarea>
+      </div>
+
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+
 </wicket:extend>
 </body>
 </html>

@@ -15,14 +15,13 @@
  */
 package org.rauschig.wicket.ace.app;
 
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * HomePage.
  */
-public class HomePage extends WebPage {
+public class HomePage extends BasePage {
     private static final long serialVersionUID = 1L;
 
     public HomePage() {

@@ -15,23 +15,24 @@
  */
 package org.rauschig.wicket.ace.app;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
- * AceExampleApplication.
+ * ExamplePage.
  */
-public class AceExampleApplication extends WebApplication {
+public class ExamplePage extends BasePage {
+    private static final long serialVersionUID = 1L;
 
-    @Override
-    protected void init() {
-        getMarkupSettings().setStripWicketTags(true);
-
-        mountPage("/basic-form-example", BasicFormExample.class);
+    public ExamplePage() {
+        super();
     }
 
-    @Override
-    public Class<? extends Page> getHomePage() {
-        return HomePage.class;
+    public ExamplePage(IModel<?> model) {
+        super(model);
+    }
+
+    public ExamplePage(PageParameters parameters) {
+        super(parameters);
     }
 }

@@ -15,23 +15,22 @@
  */
 package org.rauschig.wicket.ace.app;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.io.IClusterable;
 
 /**
- * AceExampleApplication.
+ * Snippet.
  */
-public class AceExampleApplication extends WebApplication {
+public class Snippet implements IClusterable {
 
-    @Override
-    protected void init() {
-        getMarkupSettings().setStripWicketTags(true);
+    private static final long serialVersionUID = 1L;
 
-        mountPage("/basic-form-example", BasicFormExample.class);
+    private String code;
+
+    public String getCode() {
+        return code;
     }
 
-    @Override
-    public Class<? extends Page> getHomePage() {
-        return HomePage.class;
+    public void setCode(String code) {
+        this.code = code;
     }
 }
