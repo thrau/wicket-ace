@@ -24,9 +24,9 @@ import org.apache.wicket.util.value.ValueMap;
 
 /**
  * Such parameters. Many config. Wow.
- * <p/>
- * see <a
- * href="https://github.com/ajaxorg/ace/wiki/Configuring-Ace">https://github.com/ajaxorg/ace/wiki/Configuring-Ace</a>
+ * 
+ * See
+ * <a href="https://github.com/ajaxorg/ace/wiki/Configuring-Ace">https://github.com/ajaxorg/ace/wiki/Configuring-Ace</a>
  */
 public class AceConfig implements IClusterable {
 

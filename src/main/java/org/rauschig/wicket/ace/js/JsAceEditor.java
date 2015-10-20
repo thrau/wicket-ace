@@ -92,6 +92,8 @@ public class JsAceEditor extends JsIdentifier {
     /**
      * Returns a JsVariableDefinition that creates a new variable named as this identifier and binds the result of
      * <code>ace.edit('...')</code> to it.
+     * 
+     * @return a JsVariableDefinition
      */
     public IJsStatement register() {
         return new JsVariableDefinition(this, new JsCall("ace.edit", getIdentifier()));
