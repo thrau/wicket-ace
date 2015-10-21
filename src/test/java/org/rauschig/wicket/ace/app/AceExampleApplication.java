@@ -28,6 +28,7 @@ public class AceExampleApplication extends WebApplication {
         getMarkupSettings().setStripWicketTags(true);
 
         mountPage("/basic-form-example", BasicFormExample.class);
+        mountPage("/ajax-form-example", AjaxFormExample.class);
     }
 
     @Override
