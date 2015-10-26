@@ -112,10 +112,7 @@ public class AceEditorField<T> extends TextArea<T> {
                             .set("class", new JsCallChain(textarea).call("attr", "class"))
                             .asObject()
                     )),
-                    new JsCallChain(editDiv).call("insertBefore", textarea),
-                    new JsCallChain(textarea).call("closest", "form").call("submit", new JsFunction(
-                            $(textarea).val(editor.getSession().getValue())
-                    ))
+                    new JsCallChain(editDiv).call("insertBefore", textarea)
                 );
             }
         });
@@ -219,7 +216,10 @@ public class AceEditorField<T> extends TextArea<T> {
             return new JsStatements(
                     editor.register(),
                     editor.setOptions(options),
-                    editor.setValue($(this).val())
+                    editor.setValue($(this).val()),
+                    editor.getSession().on("change", new JsFunction(
+                            $(this).val(editor.getSession().getValue())
+                    ))
             );
         }
 
