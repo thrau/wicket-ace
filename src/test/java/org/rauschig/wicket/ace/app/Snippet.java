@@ -33,4 +33,11 @@ public class Snippet implements IClusterable {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "Snippet{" +
+            "code='" + code + '\'' +
+            '}';
+    }
 }
